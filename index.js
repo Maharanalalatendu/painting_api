@@ -5,7 +5,8 @@ const  app=express();
 
 require('dotenv').config();
 
-app.use(express.urlencoded({extended:false}));//middle ware using for req.body
+//app.use(express.urlencoded({extended:false}));//middle ware using for req.body for html
+app.use(express.json({extended:false}));//middle ware using for req.body for react.js
 
 app.post("/api/post",async function(req,res) {
     try{
