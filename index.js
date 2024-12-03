@@ -24,6 +24,16 @@ const allpost=await dbschema.find();
 res.json(allpost);
 })
 
+app.post("/api/each_post/:post_id",async function(req,res) {
+    try {
+    const post_id = req.params.post_id;
+    const post = await dbschema.findById(post_id);
+    res.json(post);
+     } catch (err) {
+    res.json({ error: 'Server error' });
+  }
+})
+
 app.post("/api/comment/:post_id",async function(req,res) {
     try {
         const post_id = req.params.post_id;
