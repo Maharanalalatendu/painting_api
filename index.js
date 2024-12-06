@@ -5,8 +5,8 @@ const  app=express();
 
 require('dotenv').config();
 
-//app.use(express.urlencoded({extended:false}));//middle ware using for req.body for html
-app.use(express.json({extended:false}));//middle ware using for req.body for react.js
+// app.use(express.urlencoded({extended:false}));//middle ware using for req.body
+app.use(express.json());//middle ware using for req.body to get json format data
 
 app.post("/api/post",async function(req,res) {
     try{
@@ -24,14 +24,23 @@ const allpost=await dbschema.find();
 res.json(allpost);
 })
 
-app.post("/api/each_post/:post_id",async function(req,res) {
+app.get("/api/each_post/:post_id",async function(req,res) {
     try {
-    const post_id = req.params.post_id;
-    const post = await dbschema.findById(post_id);
-    res.json(post);
-     } catch (err) {
-    res.json({ error: 'Server error' });
-  }
+        const post_id = req.params.post_id;
+        const post = await dbschema.findById(post_id);
+        res.json(post);
+    } catch (err) {
+        res.json({ error: 'Server error'});
+    }
+})
+app.get("/api/post/:category",async function(req,res) {
+    try {
+        const category = req.params.category;
+        const post = await dbschema.find({category: category});
+        res.json(post);
+    } catch (err) {
+        res.json({ error: 'Server error'});
+    }
 })
 
 app.post("/api/comment/:post_id",async function(req,res) {
@@ -47,20 +56,20 @@ app.post("/api/comment/:post_id",async function(req,res) {
         await post.save();
         res.json("comment add successfully / may be you are not hendle frontend");
     } catch (err) {
-        res.json({ error: 'Server error' });
+        res.json({ error: err });
    }
 })
 
-app.post("/api/like/:post_id/:value",async function(req,res) {
+app.get("/api/like/:post_id/:value",async function(req,res) {
     const post_id = req.params.post_id;
     const value = req.params.value;
     const post = await dbschema.findById(post_id);
     //res.json({ message: 'Data added successfully', id: post.like});
-    if(value==0){
+    if(value=='0'){
         post.like--;
         res.json({ message: 'dislike added successfully', id: post.like});
     }
-    if(value==1){
+    if(value=='1'){
         post.like++;
         res.json({ message: 'like added successfully', id: post.like});
     }
@@ -68,9 +77,10 @@ app.post("/api/like/:post_id/:value",async function(req,res) {
 })
 
 app.post("/api/contact",async function(req,res) {
+    console.log(req.body);
     try{
-        const body = req.body;
-        const newpost = new dbschema2(body);  
+        const {name, number, query} = req.body;
+        const newpost = new dbschema2({name, number, query});  
         await newpost.save();
         res.json({ message: 'Data added successfully', id: newpost._id });
     }catch (error) {
