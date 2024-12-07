@@ -1,9 +1,19 @@
 const express=require('express');
+const cors = require('cors');
 const dbschema=require('./mongoose');
 const dbschema2=require('./mongoose2');
 const  app=express();
-
 require('dotenv').config();
+
+// Use the cors middleware
+app.use(cors());
+const corsOptions = {
+    origin: '*',  // Allow all origins (not recommended for production)
+    methods: 'GET, POST, PUT, DELETE', // Allow these HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allow these headers
+  };
+app.use(cors(corsOptions));
+
 
 // app.use(express.urlencoded({extended:false}));//middle ware using for req.body
 app.use(express.json());//middle ware using for req.body to get json format data
