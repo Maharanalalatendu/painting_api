@@ -70,7 +70,7 @@ app.post("/api/comment/:post_id",async function(req,res) {
    }
 })
 
-app.get("/api/like/:post_id/:value",async function(req,res) {
+app.get("/api/like/:post_id/:value",async function(req,res) {    
     const post_id = req.params.post_id;
     const value = req.params.value;
     const post = await dbschema.findById(post_id);
@@ -84,6 +84,28 @@ app.get("/api/like/:post_id/:value",async function(req,res) {
         res.json({ message: 'like added successfully', id: post.like});
     }
     await post.save();
+})
+
+app.get("/api/reating/:post_id/:value/:user",async function(req,res) {
+   try {
+    const post_id = req.params.post_id;
+    const value = req.params.value;
+    const user = req.params.user;
+    const post = await dbschema.findById(post_id);
+    let intNumber = parseInt(value);
+        if(user==1){
+            post.no_of_user_reating++;
+            post.reating=(post.reating+intNumber);
+            res.json({ message: 'reating added successfully', rating: post.reating});
+        }
+        if(user==0){
+            post.reating=(post.reating-intNumber);
+            res.json({ message: 'reating delete successfully', rating: post.reating});
+        }
+        await post.save();
+    } catch (err) {
+        res.json({ error: err });
+      }
 })
 
 app.post("/api/contact",async function(req,res) {

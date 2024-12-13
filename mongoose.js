@@ -9,7 +9,11 @@ const post_schema=mongoose.Schema({
   deseription:String,
   select_image_type:String,
   category:String,
-  like:Number,
+
+  like:{ type: Number, default: 0 },
+  no_of_user_reating:{ type: Number, default: 0 },
+  reating:{ type: Number, default: 0 },
+
   all_comments: [{
     comment: String,
    }]
