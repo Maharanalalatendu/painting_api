@@ -6,6 +6,7 @@ const  app=express();
 require('dotenv').config();
 
 // Use the cors middleware
+//*it is use to access to tata in all ip adress 
 app.use(cors());
 const corsOptions = {
     origin: '*',  // Allow all origins (not recommended for production)
